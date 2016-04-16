@@ -52,6 +52,12 @@ class OFLSBot():
 
     def get_date_shift_dict(self, date=0):
         date_info = self._get_date_info(date)
+
+        if not date_info in self.data_dict:
+            print('data not found orz')
+            sys.exit()
+        #assert(date_info in self.data_dict)
+
         shift = self.data_dict[date_info]
         CELLS = 22
         shift = shift[:CELLS]
@@ -92,7 +98,7 @@ class OFLSBot():
         week_shift_str_list = [
             week_str[i] + '\n' + self._format_table(shift) for i, shift in enumerate(shift_list)]
 
-        return 'Hello, I am OfLSBot.\nThe shifts of this week are \n' + '\n\n'.join(week_shift_str_list)
+        return 'Hello, I am OFLSBot.\nThe shifts of this week are \n' + '\n\n'.join(week_shift_str_list)
 
     def date_shift(self, date=0):
         shift = self.get_date_shift_dict(date)
@@ -100,7 +106,7 @@ class OFLSBot():
         date_str = self._get_date_info(date)
         date_str = 'Today ' + date_str if date == 0 else date_str
 
-        return 'Hello, I am OfLSBot.\n' + date_str + '\'s shift is \n' + shift_str
+        return 'Hello, I am OFLSBot.\n' + date_str + '\'s shift is \n' + shift_str
 
 
 #@kame.comment
