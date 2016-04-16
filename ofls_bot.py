@@ -73,13 +73,8 @@ class OFLSBot():
 
     def date_shift(self, date=0):
         shift = self.get_date_shift_dict(date)
-
-        if date == 0:
-            date_str = 'Today'
-        elif date > 0:
-            date_str = 'after ' + str(date) + ' day'
-        elif date < 0:
-            date_str = 'before ' + str(abs(date)) + ' day'
+        date_str = self._get_date_info(date)
+        date_str = 'Today ' + date_str if date == 0 else date_str
 
         shift_str = '  1st: ' + ','.join(shift[1]) + '\n' + \
                     '  2nd: ' + ','.join(shift[2]) + '\n' + \
@@ -90,13 +85,13 @@ class OFLSBot():
                     'night: ' + ','.join(shift[6])
 
 
-        return 'Hello, I am OfLSBot.\n' + date_str + 's shift is \n' + shift_str
+        return 'Hello, I am OfLSBot.\n' + date_str + '\'s shift is \n' + shift_str
 
 
 #@kame.comment
 def main():
     oflsbot = OFLSBot()
-    print(oflsbot.date_shift(-1))
+    print(oflsbot.date_shift(0))
 
 
 if __name__ == "__main__":
