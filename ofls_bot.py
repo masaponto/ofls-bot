@@ -8,7 +8,7 @@ import requests
 import datetime
 
 from kamebot import Kamebot
-kame = Kamebot(channel='#random')
+kame = Kamebot(channel='#ofls')
 
 class OFLSBot():
 
