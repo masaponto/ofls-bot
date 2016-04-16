@@ -70,11 +70,13 @@ class OFLSBot():
     def _fix_list(self, shift_list):
         return [name for name in shift_list if name != '']
 
-    def date_shift(self, date=0):
-        shift = self.get_date_shift_dict(date)
-        date_str = self._get_date_info(date)
-        date_str = 'Today ' + date_str if date == 0 else date_str
+    def _get_week_shift_list(self, week=0):
+        weekday = datetime.date.today().weekday()
+        week_start = - weekday + week * 7
+        week_end = 6 - weekday + week * 7
+        return [self.get_date_shift_dict(date) for date in range(week_start, week_end + 1)]
 
+    def _format_table(self, shift):
         shift_str = '  1st: ' + ','.join(shift[1]) + '\n' + \
                     '  2nd: ' + ','.join(shift[2]) + '\n' + \
                     'lunch: ' + ','.join(shift['lunch']) + '\n' + \
@@ -82,6 +84,21 @@ class OFLSBot():
                     '  4th: ' + ','.join(shift[4]) + '\n' + \
                     '  5th: ' + ','.join(shift[5]) + '\n' + \
                     'night: ' + ','.join(shift[6])
+        return shift_str
+
+    def week_shift(self, week=0):
+        week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
+        shift_list = self._get_week_shift_list(week)
+        week_shift_str_list = [
+            week_str[i] + '\n' + self._format_table(shift) for i, shift in enumerate(shift_list)]
+
+        return 'Hello, I am OfLSBot.\nThe shifts of this week are \n' + '\n\n'.join(week_shift_str_list)
+
+    def date_shift(self, date=0):
+        shift = self.get_date_shift_dict(date)
+        shift_str = self._format_table(shift)
+        date_str = self._get_date_info(date)
+        date_str = 'Today ' + date_str if date == 0 else date_str
 
         return 'Hello, I am OfLSBot.\n' + date_str + '\'s shift is \n' + shift_str
 
@@ -90,6 +107,7 @@ class OFLSBot():
 def main():
     oflsbot = OFLSBot()
     print(oflsbot.date_shift(0))
+    print(oflsbot.week_shift(1))
 
 
 if __name__ == "__main__":
