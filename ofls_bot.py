@@ -10,7 +10,6 @@ import datetime
 from kamebot import Kamebot
 kame = Kamebot(channel='#random')
 
-
 class OFLSBot():
 
     def __init__(self, KEY='', GID=''):
@@ -109,11 +108,11 @@ class OFLSBot():
         return 'Hello, I am OFLSBot.\n' + date_str + '\'s shift is \n' + shift_str
 
 
-#@kame.comment
+@kame.comment
 def main():
     oflsbot = OFLSBot()
     print(oflsbot.date_shift(0))
-    print(oflsbot.week_shift(1))
+    #print(oflsbot.week_shift(1))
 
 
 if __name__ == "__main__":
