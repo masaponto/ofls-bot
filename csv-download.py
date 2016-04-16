@@ -34,6 +34,7 @@ class OFLSBot():
 
         self.get_data_dict()
 
+
     def _get_csv_list(self, url):
         r = requests.get(url)
         decoded_content = r.content.decode('utf-8')
@@ -44,25 +45,17 @@ class OFLSBot():
         datalist = self._get_csv_list(self.URL)
         self.data_dict = {data[0][:-3]: data[1:] for data in datalist}
 
-    def _get_today_info(self):
-        today = datetime.datetime.today()
-        today_str = today.strftime("%m/%d")
-        changed_today_str = today_str if today_str[0] != '0' else today_str[1:]
-        return changed_today_str
-
-    # todo 一般化する　上の関数とくっつける
-    # todo class にする
-
-    def _get_yesterday_info(self):
-        yesterday = datetime.date.today() - datetime.timedelta(0)
+    def _get_date_info(self, date = 0):
+        yesterday = datetime.date.today() + datetime.timedelta(date)
         yesterday_str = yesterday.strftime("%m/%d")
         changed_yesterday_str = yesterday_str if yesterday_str[
             0] != '0' else yesterday_str[1:]
         return changed_yesterday_str
 
 
-    def _get_shift_dict(self, data_dict, date_info):
-        shift = data_dict[date_info]
+    def get_shift_dict(self, date=0):
+        date_info = self._get_date_info(date)
+        shift = self.data_dict[date_info]
         CELLS = 22
         shift = shift[:CELLS]
         shift_dict = {1: shift[0:1],
@@ -76,11 +69,9 @@ class OFLSBot():
         return shift_dict
 
 #@kame.comment
-
-
 def main():
     oflsbot = OFLSBot()
-    print(oflsbot._get_yesterday_info())
+    print(oflsbot.get_shift_dict(-1))
 
 
 if __name__ == "__main__":
