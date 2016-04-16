@@ -10,7 +10,6 @@ import datetime
 from kamebot import Kamebot
 kame = Kamebot(channel='#random')
 
-
 class OFLSBot():
 
     def __init__(self, KEY='', GID=''):
@@ -46,14 +45,13 @@ class OFLSBot():
         self.data_dict = {data[0][:-3]: data[1:] for data in datalist}
 
     def _get_date_info(self, date = 0):
-        yesterday = datetime.date.today() + datetime.timedelta(date)
-        yesterday_str = yesterday.strftime("%m/%d")
-        changed_yesterday_str = yesterday_str if yesterday_str[
-            0] != '0' else yesterday_str[1:]
-        return changed_yesterday_str
+        date = datetime.date.today() + datetime.timedelta(date)
+        date_str = date.strftime("%m/%d")
+        fixed_date_str = date_str if date_str[
+            0] != '0' else date_str[1:]
+        return fixed_date_str
 
-
-    def get_shift_dict(self, date=0):
+    def get_date_shift_dict(self, date=0):
         date_info = self._get_date_info(date)
         shift = self.data_dict[date_info]
         CELLS = 22
@@ -66,12 +64,39 @@ class OFLSBot():
                       5: shift[13:15],
                       6: shift[16:22]}
 
+        shift_dict = {k:self._fix_list(v) for k, v in shift_dict.items()}
+
         return shift_dict
+
+    def _fix_list(self, shift_list):
+        return [name for name in shift_list if name != '']
+
+    def date_shift(self, date=0):
+        shift = self.get_date_shift_dict(date)
+
+        if date == 0:
+            date_str = 'Today'
+        elif date > 0:
+            date_str = 'after ' + str(date) + ' day'
+        elif date < 0:
+            date_str = 'before ' + str(abs(date)) + ' day'
+
+        shift_str = '  1st: ' + ','.join(shift[1]) + '\n' + \
+                    '  2nd: ' + ','.join(shift[2]) + '\n' + \
+                    'lunch: ' + ','.join(shift['lunch']) + '\n' + \
+                    '  3rd: ' + ','.join(shift[3]) + '\n' + \
+                    '  4th: ' + ','.join(shift[4]) + '\n' + \
+                    '  5th: ' + ','.join(shift[5]) + '\n' + \
+                    'night: ' + ','.join(shift[6])
+
+
+        return 'Hello, I am OfLSBot.\n' + date_str + 's shift is \n' + shift_str
+
 
 #@kame.comment
 def main():
     oflsbot = OFLSBot()
-    print(oflsbot.get_shift_dict(-1))
+    print(oflsbot.date_shift(-1))
 
 
 if __name__ == "__main__":
