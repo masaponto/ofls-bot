@@ -10,6 +10,7 @@ import datetime
 from kamebot import Kamebot
 kame = Kamebot(channel='#random')
 
+
 class OFLSBot():
 
     def __init__(self, KEY='', GID=''):
@@ -33,7 +34,6 @@ class OFLSBot():
 
         self.get_data_dict()
 
-
     def _get_csv_list(self, url):
         r = requests.get(url)
         decoded_content = r.content.decode('utf-8')
@@ -44,11 +44,10 @@ class OFLSBot():
         datalist = self._get_csv_list(self.URL)
         self.data_dict = {data[0][:-3]: data[1:] for data in datalist}
 
-    def _get_date_info(self, date = 0):
+    def _get_date_info(self, date=0):
         date = datetime.date.today() + datetime.timedelta(date)
         date_str = date.strftime("%m/%d")
-        fixed_date_str = date_str if date_str[
-            0] != '0' else date_str[1:]
+        fixed_date_str = date_str if date_str[0] != '0' else date_str[1:]
         return fixed_date_str
 
     def get_date_shift_dict(self, date=0):
@@ -64,7 +63,7 @@ class OFLSBot():
                       5: shift[13:15],
                       6: shift[16:22]}
 
-        shift_dict = {k:self._fix_list(v) for k, v in shift_dict.items()}
+        shift_dict = {k: self._fix_list(v) for k, v in shift_dict.items()}
 
         return shift_dict
 
@@ -83,7 +82,6 @@ class OFLSBot():
                     '  4th: ' + ','.join(shift[4]) + '\n' + \
                     '  5th: ' + ','.join(shift[5]) + '\n' + \
                     'night: ' + ','.join(shift[6])
-
 
         return 'Hello, I am OfLSBot.\n' + date_str + '\'s shift is \n' + shift_str
 
