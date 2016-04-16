@@ -16,18 +16,18 @@ class OFLSBot():
     def __init__(self, KEY='', GID=''):
 
         if KEY == '':
-            if os.environ.get("KEY") == '':
+            if os.environ.get("OFLSKEY") == '':
                 print('environment vars KEY not found')
                 sys.exit()
             else:
-                KEY = os.environ.get("KEY")
+                KEY = os.environ.get("OFLSKEY")
 
         if GID == '':
-            if os.environ.get("SPGID") == '':
-                print('environment vars SPGID not found')
+            if os.environ.get("OFLSGID") == '':
+                print('environment vars OFLSGID not found')
                 sys.exit()
             else:
-                GID = os.environ.get("SPGID")
+                GID = os.environ.get("OFLSGID")
 
         self.URL = 'https://docs.google.com/spreadsheets/d/' + \
             KEY + '/export?format=csv&gid=' + GID

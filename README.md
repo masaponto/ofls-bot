@@ -4,6 +4,6 @@ oflsのシフト表を持ってくる
 
 # How to install
 ```
-$ echo 'export KEY=<your-spreadsheet-key-goes-here>' >> ~/.zshenv
-$ echo 'export SPGID=<your-spreadsheet-gid-goes-here>' >> ~/.zshenv
+$ echo 'export OFLSKEY=<your-spreadsheet-key-goes-here>' >> ~/.zshenv
+$ echo 'export OFLSGID=<your-spreadsheet-gid-goes-here>' >> ~/.zshenv
 ```
