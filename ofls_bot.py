@@ -5,7 +5,7 @@ from ofls_shift import OFLS_SHIFT
 from kamebot import Kamebot
 kame = Kamebot(channel='#ofls')
 
-#@kame.comment
+@kame.comment
 def main():
     shift = OFLS_SHIFT()
     print("OFLSBotだよー。シフトを知らせるよ！")
