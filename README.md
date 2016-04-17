@@ -5,6 +5,9 @@ oflsのシフト表を持ってくる
 ```
 $ echo 'export OFLSKEY=<your-spreadsheet-key-goes-here>' >> ~/.zshenv
 $ echo 'export OFLSGID=<your-spreadsheet-gid-goes-here>' >> ~/.zshenv
+
+# option for ofls_bot.py
+$ echo 'export OFLSNAME=<your-name-goes-here>' >> ~/.zshenv
 ```
 
 ## How to use
