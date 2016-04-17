@@ -9,6 +9,9 @@ $ echo 'export OFLSGID=<your-spreadsheet-gid-goes-here>' >> ~/.zshenv
 # option for ofls_bot.py
 $ echo 'export OFLSNAME=<your-name-goes-here>' >> ~/.zshenv
 ```
+for setting ofls_bot.py
+see [kamebot](https://github.com/masaponto/kamebot)
+
 
 ## How to use
 - ofls_shift.py : Downlooad the ofls shift which is splead sheet, and return good string.
