@@ -166,7 +166,7 @@ class OFLS_SHIFT():
         week_shift_str_list = [
             week_str[i] + '\n' + self._format_table(shift) for i, shift in enumerate(shift_list)]
 
-        return '\n\n'.join(week_shift_str_list)
+        return '\n'.join(week_shift_str_list)
 
     def date_shift(self, date=0):
         """ get one day shift and return good stirng
