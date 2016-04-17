@@ -189,7 +189,7 @@ class OFLS_SHIFT():
 
 def main():
     shift = OFLS_SHIFT()
-    print(oflsbot.date_shift(0))
+    print(shift.date_shift(0))
     # print(oflsbot.week_shift(1))
 
 
