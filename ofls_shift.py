@@ -187,9 +187,26 @@ class OFLS_SHIFT():
         return date_str + '\n' + shift_str
 
 
+    def _format_your_shift(self, shift_list, name):
+        your_shift = [[str(period) for period, lst in shift.items() if name in lst] for shift in (shift_list)]
+        print(your_shift)
+        week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
+        shift_str = ""
+        for i, shift in enumerate(your_shift):
+            shift_str += week_str[i] + '\n' + ','.join(shift) + '\n' if shift != [] else ""
+
+        print(shift_str)
+
+
+    def get_your_week_shift(self, name, week=0):
+        shift_list = self._get_week_shift_list(week)
+        self._format_your_shift(shift_list, name)
+
+
 def main():
     shift = OFLS_SHIFT()
-    print(shift.date_shift(0))
+    #print(shift.date_shift(0))
+    shift.get_your_week_shift("橋本", week=1)
     # print(oflsbot.week_shift(1))
 
 
