@@ -81,7 +81,7 @@ class OFLS_SHIFT():
         date (int)
 
         Returns
-        dictionary {int or string: string}
+        dictionary {int: [string]}
         """
         date_info = self._get_date_info(date)
 
@@ -95,11 +95,11 @@ class OFLS_SHIFT():
         shift = shift[:CELLS]
         shift_dict = {1: shift[0:1],
                       2: shift[2:3],
-                      'lunch': shift[4:6],
-                      3: shift[7:9],
-                      4: shift[10:12],
-                      5: shift[13:15],
-                      6: shift[16:22]}
+                      3: shift[4:6],
+                      4: shift[7:9],
+                      5: shift[10:12],
+                      6: shift[13:15],
+                      7: shift[16:22]}
 
         shift_dict = {k: self._fix_list(v) for k, v in shift_dict.items()}
 
@@ -136,18 +136,18 @@ class OFLS_SHIFT():
         """format shift good view (string).
 
         Args:
-        shift {int or string: string}
+        shift {int: string}
 
         returns:
         string
         """
-        shift_str = '  1st: ' + ','.join(shift[1]) + '\n' + \
-                    '  2nd: ' + ','.join(shift[2]) + '\n' + \
-                    'lunch: ' + ','.join(shift['lunch']) + '\n' + \
-                    '  3rd: ' + ','.join(shift[3]) + '\n' + \
-                    '  4th: ' + ','.join(shift[4]) + '\n' + \
-                    '  5th: ' + ','.join(shift[5]) + '\n' + \
-                    'night: ' + ','.join(shift[6])
+
+        periods = ('  1st: ', '  2nd: ', 'lunch: ',
+                   '  3rd: ', '  4th: ', '  5th: ', 'night: ')
+        shift_str = ''
+        for i in range(6):
+            shift_str += periods[i] + ','.join(shift[i + 1]) + '\n'
+
         return shift_str
 
     def week_shift(self, week=0):
@@ -186,28 +186,39 @@ class OFLS_SHIFT():
 
         return date_str + '\n' + shift_str
 
-
-    def _format_your_shift(self, shift_list, name):
-        your_shift = [[str(period) for period, lst in shift.items() if name in lst] for shift in (shift_list)]
-        print(your_shift)
-        week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
-        shift_str = ""
-        for i, shift in enumerate(your_shift):
-            shift_str += week_str[i] + '\n' + ','.join(shift) + '\n' if shift != [] else ""
-
-        print(shift_str)
-
-
     def get_your_week_shift(self, name, week=0):
+        """ get week shift for you and return good stirng
+        week = 0 means this week. week = 1 means next week.
+        And week = -1 means last week.
+
+        Args:
+        name string
+        week (int)
+
+        Returns:
+        stirng
+        """
+        period_str = ('1st', '2nd', 'lunch', '3rd', '4th', '5th', 'night')
+        week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
+
         shift_list = self._get_week_shift_list(week)
-        self._format_your_shift(shift_list, name)
+        your_shift = [[period_str[period - 1] for period,
+                       lst in shift.items() if name in lst] for shift in (shift_list)]
+
+        shift_str = ''
+        for i, shift in enumerate(your_shift):
+            shift_str += week_str[i] + ': ' + \
+                ','.join(shift) + '\n' if shift != [] else ""
+
+        return shift_str.rstrip('\n')
 
 
 def main():
     shift = OFLS_SHIFT()
-    #print(shift.date_shift(0))
-    shift.get_your_week_shift("橋本", week=1)
-    # print(oflsbot.week_shift(1))
+    NAME = ""
+    # print(shift.date_shift(-2))
+    print(shift.week_shift(1))
+    #print(shift.get_your_week_shift(NAME, week=1))
 
 
 if __name__ == "__main__":
