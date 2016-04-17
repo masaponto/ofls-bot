@@ -9,7 +9,7 @@ import datetime
 
 
 class OFLS_SHIFT():
-    """Downlooad the ofls shift which is splead sheet and return good string.
+    """Downlooad the ofls shift which is splead sheet, and return good string.
     """
 
     def __init__(self, KEY='', GID=''):
