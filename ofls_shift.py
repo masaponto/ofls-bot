@@ -145,7 +145,7 @@ class OFLS_SHIFT():
         periods = ('  1st: ', '  2nd: ', 'lunch: ',
                    '  3rd: ', '  4th: ', '  5th: ', 'night: ')
         shift_str = ''
-        for i in range(6):
+        for i in range(6 + 1):
             shift_str += periods[i] + ','.join(shift[i + 1]) + '\n'
 
         return shift_str
