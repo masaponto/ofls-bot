@@ -6,7 +6,7 @@ import os
 import sys
 from ofls_shift import OFLS_SHIFT
 from kamebot import Kamebot
-kame = Kamebot(channel='#ofls')
+kame = Kamebot(channel='#ofls', error_comment='エラーだお')
 
 @kame.comment
 def main():
@@ -15,17 +15,9 @@ def main():
     date = datetime.date.today().weekday()
     SUNDAY = 6
 
-    if os.environ.get("OFLSNAME") == '' or os.environ.get("OFLSNAME") == None:
-        print('environment vars OFLSNAME not found')
-        print('please run follow')
-        print('$echo \'export OFLSKEY=<your-name-goes-here>\' >> ~/.zshenv')
-        sys.exit()
-    else:
-        NAME = os.environ.get("OFLSNAME")
-
     if date == SUNDAY:
-        print("OFLSBotだよー。\n来週の" + NAME + "君のシフトをお知らせするよ！")
-        print(shift.get_your_week_shift(NAME, week=1))
+        print("OFLSBotだよー。\n来週の" + shift.NAME + "君のシフトをお知らせするよ！")
+        print(shift.get_your_week_shift(1))
         print("\n全体のシフトはこれ！")
         print(shift.week_shift(1))
     else:

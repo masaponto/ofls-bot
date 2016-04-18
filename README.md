@@ -21,5 +21,14 @@ see [kamebot](https://github.com/masaponto/kamebot)
 - requests 2.9.1
 - kamebot 1.0 (option: for ofls_bot.py)
 
+## Options
+- \-w , \--week: Please input integer. Defalt is 0. 1 means next week. -1 means last week.
+
+examlpe for output next week  
+```
+$ python ofls_shifet.py -w 1
+```
+
+
 ## License
 - MIT

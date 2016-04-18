@@ -6,7 +6,7 @@ import os
 import csv
 import requests
 import datetime
-
+import argparse
 
 class OFLS_SHIFT():
     """Downlooad the ofls shift which is splead sheet, and return good string.
@@ -35,6 +35,16 @@ class OFLS_SHIFT():
 
         self.URL = 'https://docs.google.com/spreadsheets/d/' + \
             KEY + '/export?format=csv&gid=' + GID
+
+
+        if os.environ.get("OFLSNAME") == '' or os.environ.get("OFLSNAME") == None:
+            print('environment vars OFLSNAME not found')
+            print('please run follow')
+            print('$echo \'export OFLSKEY=<your-name-goes-here>\' >> ~/.zshenv')
+            sys.exit()
+        else:
+            self.NAME = os.environ.get("OFLSNAME")
+
 
         self.get_data_dict()
 
@@ -186,7 +196,7 @@ class OFLS_SHIFT():
 
         return date_str + '\n' + shift_str
 
-    def get_your_week_shift(self, name, week=0):
+    def get_your_week_shift(self, week=0):
         """ get week shift for you and return good stirng
         week = 0 means this week. week = 1 means next week.
         And week = -1 means last week.
@@ -203,7 +213,7 @@ class OFLS_SHIFT():
 
         shift_list = self._get_week_shift_list(week)
         your_shift = [[period_str[period - 1] for period,
-                       lst in shift.items() if name in lst] for shift in (shift_list)]
+                       lst in shift.items() if self.NAME in lst] for shift in (shift_list)]
 
         shift_str = ''
         for i, shift in enumerate(your_shift):
@@ -217,8 +227,16 @@ def main():
     shift = OFLS_SHIFT()
     NAME = ""
     # print(shift.date_shift(-2))
-    print(shift.week_shift(0))
-    #print(shift.get_your_week_shift(NAME, week=1))
+
+    p = argparse.ArgumentParser()
+    p.add_argument('-w', '--week', type=int, help='week', default=0, nargs='?')
+    option_args = p.parse_known_args()[0]
+
+
+    print('Your shift')
+    print(shift.get_your_week_shift(option_args.week))
+    print()
+    print(shift.week_shift(option_args.week))
 
 
 if __name__ == "__main__":
