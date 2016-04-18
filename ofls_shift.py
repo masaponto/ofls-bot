@@ -129,7 +129,7 @@ class OFLS_SHIFT():
         """
         weekday = datetime.date.today().weekday()
         week_start = - weekday + week * 7
-        week_end = 6 - weekday + week * 7
+        week_end = 5 - weekday + week * 7
         return [self.get_date_shift_dict(date) for date in range(week_start, week_end + 1)]
 
     def _format_table(self, shift):
@@ -161,7 +161,7 @@ class OFLS_SHIFT():
         Returns:
         stirng
         """
-        week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
+        week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
         shift_list = self._get_week_shift_list(week)
         week_shift_str_list = [
             week_str[i] + '\n' + self._format_table(shift) for i, shift in enumerate(shift_list)]
@@ -199,7 +199,7 @@ class OFLS_SHIFT():
         stirng
         """
         period_str = ('1st', '2nd', 'lunch', '3rd', '4th', '5th', 'night')
-        week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
+        week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
 
         shift_list = self._get_week_shift_list(week)
         your_shift = [[period_str[period - 1] for period,
@@ -217,7 +217,7 @@ def main():
     shift = OFLS_SHIFT()
     NAME = ""
     # print(shift.date_shift(-2))
-    print(shift.week_shift(1))
+    print(shift.week_shift(0))
     #print(shift.get_your_week_shift(NAME, week=1))
 
 
