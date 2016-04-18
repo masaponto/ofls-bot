@@ -225,19 +225,18 @@ class OFLS_SHIFT():
 
 def main():
     shift = OFLS_SHIFT()
-    NAME = ""
-    # print(shift.date_shift(-2))
-
     p = argparse.ArgumentParser()
-    p.add_argument('-w', '--week', type=int, help='week', default=0, nargs='?')
+    p.add_argument('-w', '--week', type=int, help='week', nargs='?')
+    p.add_argument('-d', '--date', type=int, help='date', default=0, nargs='?')
     option_args = p.parse_known_args()[0]
 
-
-    print('Your shift')
-    print(shift.get_your_week_shift(option_args.week))
-    print()
-    print(shift.week_shift(option_args.week))
-
+    if option_args.week != None:
+        print('Your shift')
+        print(shift.get_your_week_shift(option_args.week))
+        print()
+        print(shift.week_shift(option_args.week))
+    else:
+        print(shift.date_shift(option_args.date))
 
 if __name__ == "__main__":
     main()
