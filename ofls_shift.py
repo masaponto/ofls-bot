@@ -225,7 +225,7 @@ class OFLS_SHIFT():
 
 def main():
     shift = OFLS_SHIFT()
-    p = argparse.ArgumentParser()
+    p = argparse.ArgumentParser(description='This script is for get shift of ofls.')
     p.add_argument('-w', '--week', type=int, help='week', nargs='?')
     p.add_argument('-d', '--date', type=int, help='date', default=0, nargs='?')
     option_args = p.parse_known_args()[0]
