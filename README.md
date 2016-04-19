@@ -28,6 +28,8 @@ examlpe for output next week
 $ python ofls_shifet.py -w 1
 ```
 
+## Todo
+- [] Do not send to slack if nobody is on shift.
 
 ## License
 - MIT
