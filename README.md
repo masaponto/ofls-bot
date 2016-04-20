@@ -5,7 +5,7 @@
 
 ```
 $ pip install git+https://github.com/masaponto/ofls-shift  --upgrade
-$ mkdir $HOME/.config/ofls_shift/
+$ mkdir $HOME/.config/ofls-shift/
 $ echo 'key: "<ofls-google-spreadsheet-key-goes-here>"' >> $HOME/.config/ofls_shift/ofls.yml
 $ echo 'gid: "<ofls-google-spreadsheet-gid-goes-here>"' >> $HOME/.config/ofls_shift/ofls.yml
 $ echo 'name: "<your-name-goes-here>"' >> $HOME/.config/ofls_shift/ofls.yml
