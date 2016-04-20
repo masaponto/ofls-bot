@@ -1,10 +1,11 @@
 # ofls-shift
 - Print shift table of OFLS
+- Python 3.x
 
 ## Install and Setting
 
 ```
-$ pip install git+https://github.com/masaponto/ofls-shift  --upgrade
+$ pip3 install git+https://github.com/masaponto/ofls-shift  --upgrade
 $ mkdir $HOME/.config/ofls-shift/
 $ echo 'key: "<ofls-google-spreadsheet-key-goes-here>"' >> $HOME/.config/ofls_shift/ofls.yml
 $ echo 'gid: "<ofls-google-spreadsheet-gid-goes-here>"' >> $HOME/.config/ofls_shift/ofls.yml
