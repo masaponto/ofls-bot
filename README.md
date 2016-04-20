@@ -37,7 +37,7 @@ $ ofls -w 1
 
 
 ## And more ...
-If you want use ofls-shift as slack bot. I recomend you to use [kame_bot](https://github.com/masaponto/kamebot)  
+If you want use ofls-shift as slack bot. You can use [kame_bot](https://github.com/masaponto/kamebot)  
 The sample is as follows  
 [ofls_bot](https://gist.github.com/masaponto/7057bd59d07a236b463299c08fd616c5)  
 
