@@ -4,9 +4,9 @@
 ## Setting
     
 ```
-$ echo 'key: \"<ofls-google-spreadsheet-key-goes-here>\"' >> ofls.yml
-$ echo 'gid: \"<ofls-google-spreadsheet-gid-goes-here>\"' >> ofls.yml
-$ echo 'name: \"<your-name-goes-here>\"' >> ofls.yml
+$ echo 'key: "<ofls-google-spreadsheet-key-goes-here>"' >> ofls.yml
+$ echo 'gid: "<ofls-google-spreadsheet-gid-goes-here>"' >> ofls.yml
+$ echo 'name: "<your-name-goes-here>"' >> ofls.yml
 ```
 
 For setting ofls_bot.py  
