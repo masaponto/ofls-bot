@@ -12,9 +12,9 @@ setup(
     url='masaponto.github.io',
     install_requires=['requests', 'pyyaml'],
     py_modules = ["ofls-shift"],
+    package_dir = {'': 'src'},
     entry_points={
         'console_scripts':
-            'ofls = src.ofls_shift:print_shift'
-    },
-    package_dir = {'': 'src'}
+            'ofls = ofls_shift:main'
+    }
 )
