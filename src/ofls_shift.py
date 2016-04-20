@@ -16,8 +16,13 @@ class OFLS_SHIFT():
 
     def __init__(self):
 
-        with open('ofls.yml','r') as f:
-            data = yaml.load(f)
+        try:
+            with open(os.environ['HOME'] + '/.config/ofls-shift/ofls.yml', 'r') as f:
+                data = yaml.load(f)
+        except Exception as e:
+            print(e)
+            print('Please create config flie at $HOME/.config/ofls_shift/ofls.yml.')
+            sys.exit(1)
 
         self.NAME = data['name']
         self.URL = 'https://docs.google.com/spreadsheets/d/' + \
@@ -34,7 +39,13 @@ class OFLS_SHIFT():
         Returns:
         2d-list [[string]]
         """
-        r = requests.get(url)
+        try:
+            r = requests.get(url)
+        except Exception as e:
+            print(e)
+            print('key or gid are not correct.')
+            sys.exit(1)
+
         decoded_content = r.content.decode('utf-8')
         reader = csv.reader(decoded_content.splitlines(), delimiter=',')
         return list(reader)
@@ -200,7 +211,7 @@ class OFLS_SHIFT():
         return shift_str.rstrip('\n')
 
 
-def main():
+def print_shift():
     p = argparse.ArgumentParser(description='This script is for get shift of ofls.')
     p.add_argument('-w', '--week', type=int, help='week', nargs='?')
     p.add_argument('-d', '--date', type=int, help='date', default=0, nargs='?')
@@ -214,6 +225,9 @@ def main():
         print(shift.week_shift(option_args.week))
     else:
         print(shift.date_shift(option_args.date))
+
+def main():
+    print_shift()
 
 if __name__ == "__main__":
     main()
