@@ -4,47 +4,24 @@
 import sys
 import os
 import csv
-import requests
 import datetime
 import argparse
+import requests
+import yaml
+
 
 class OFLS_SHIFT():
     """Downlooad the ofls shift which is splead sheet, and return good string.
     """
 
-    def __init__(self, KEY='', GID=''):
-        """
-        Args:
-        KEY (stirng) key of google spreadsheets, you can check it from the url.
-        GID (string) gid of google spreadsheets, you can check it from the url.
-        """
+    def __init__(self):
 
-        if KEY == '':
-            if os.environ.get("OFLSKEY") == '':
-                print('environment vars KEY not found')
-                sys.exit()
-            else:
-                KEY = os.environ.get("OFLSKEY")
+        with open('ofls.yml','r') as f:
+            data = yaml.load(f)
 
-        if GID == '':
-            if os.environ.get("OFLSGID") == '':
-                print('environment vars OFLSGID not found')
-                sys.exit()
-            else:
-                GID = os.environ.get("OFLSGID")
-
+        self.NAME = data['name']
         self.URL = 'https://docs.google.com/spreadsheets/d/' + \
-            KEY + '/export?format=csv&gid=' + GID
-
-
-        if os.environ.get("OFLSNAME") == '' or os.environ.get("OFLSNAME") == None:
-            print('environment vars OFLSNAME not found')
-            print('please run follow')
-            print('$echo \'export OFLSKEY=<your-name-goes-here>\' >> ~/.zshenv')
-            sys.exit()
-        else:
-            self.NAME = os.environ.get("OFLSNAME")
-
+          str(data['key']) + '/export?format=csv&gid=' + str(data['gid'])
 
         self.get_data_dict()
 
@@ -135,7 +112,7 @@ class OFLS_SHIFT():
         week (int)
 
         Returns:
-        list of shift(dictionary)  [{int or string: string}]
+        list of shift (dictionary)  [{int: string}]
         """
         weekday = datetime.date.today().weekday()
         week_start = - weekday + week * 7
