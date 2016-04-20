@@ -21,7 +21,7 @@ class OFLS_SHIFT():
 
         self.NAME = data['name']
         self.URL = 'https://docs.google.com/spreadsheets/d/' + \
-          str(data['key']) + '/export?format=csv&gid=' + str(data['gid'])
+          data['key'] + '/export?format=csv&gid=' + data['gid']
 
         self.get_data_dict()
 
