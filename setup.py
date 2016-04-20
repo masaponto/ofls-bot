@@ -11,7 +11,7 @@ setup(
     author_email='masaponto@gmail.com',
     url='masaponto.github.io',
     install_requires=['requests', 'pyyaml'],
-    py_modules = ["ofls-shift"],
+    py_modules = ["ofls_shift"],
     package_dir = {'': 'src'},
     entry_points={
         'console_scripts':
