@@ -39,7 +39,7 @@ $ ofls -w 1
 ## And more ...
 If you want use ofls-shift as slack bot. You can use [kame_bot](https://github.com/masaponto/kamebot)  
 The sample is as follows  
-[ofls_bot](https://gist.github.com/masaponto/7057bd59d07a236b463299c08fd616c5)  
+[ofls_bot](https://gist.github.com/masaponto/63c76fb3514412f2239b42f7770c32e3)  
 
 ## Todo
 - [ ] Do not send to slack if nobody is on shift.
