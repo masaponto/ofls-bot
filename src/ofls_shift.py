@@ -182,7 +182,7 @@ class OFLS_SHIFT():
         date_str = self._get_date_info(date)
         date_str = 'Today ' + date_str if date == 0 else date_str
 
-        return date_str + '\n' + shift_str
+        return date_str + '\n' + shift_str.rstrip('\n')
 
     def get_your_week_shift(self, week=0):
         """ get week shift for you and return good stirng
