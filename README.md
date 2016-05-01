@@ -41,8 +41,5 @@ If you want use ofls-shift as slack bot. You can use [kame_bot](https://github.c
 The sample is as follows  
 [ofls_bot](https://gist.github.com/masaponto/63c76fb3514412f2239b42f7770c32e3)  
 
-## Todo
-- [ ] Do not send to slack if nobody is on shift.
-
 ## License
 - MIT
