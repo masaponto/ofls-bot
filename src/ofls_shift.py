@@ -69,7 +69,11 @@ class OFLS_SHIFT():
         """
         date = datetime.date.today() + datetime.timedelta(date)
         date_str = date.strftime("%m/%d")
-        fixed_date_str = date_str if date_str[0] != '0' else date_str[1:]
+
+        # change 05/01 -> 5/1, 03/10 -> 3/10
+        fixed_date_str = date_str if date_str[-2] != '0' else date_str[0:-2] + date_str[-1]
+        fixed_date_str = date_str if fixed_date_str[0] != '0' else fixed_date_str[1:]
+        
         return fixed_date_str
 
     def get_date_shift_dict(self, date=0):
@@ -81,8 +85,8 @@ class OFLS_SHIFT():
         Returns
         dictionary {int: [string]}
         """
-        date_info = self._get_date_info(date)
-
+        date_info = self._get_date_info(date)        
+        
         if not date_info in self.data_dict:
             print('data not found orz')
             sys.exit()
