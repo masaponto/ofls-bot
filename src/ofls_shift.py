@@ -70,7 +70,7 @@ class OFLS_SHIFT():
         date = datetime.date.today() + datetime.timedelta(date)
         date_str = date.strftime("%m/%d")
 
-        # change 05/01 -> 5/1, 03/10 -> 3/10
+        # change date string format ex)  -> 5/1, 03/10 -> 3/10
         fixed_date_str = date_str if date_str[-2] != '0' else date_str[0:-2] + date_str[-1]
         fixed_date_str = date_str if fixed_date_str[0] != '0' else fixed_date_str[1:]
         
@@ -95,6 +95,7 @@ class OFLS_SHIFT():
         shift = self.data_dict[date_info]
         CELLS = 22
         shift = shift[:CELLS]
+       
         shift_dict = {1: shift[0:1],
                       2: shift[2:3],
                       3: shift[4:6],
@@ -170,21 +171,38 @@ class OFLS_SHIFT():
 
         return '\n'.join(week_shift_str_list)
 
+    def _is_noshift(self, shift):
+        """
+        Args
+        shift (dictionary){int: [string]}
+        
+        Returns:
+        boolean
+        """
+
+        return bool(sum([v == [] for k, v in shift.items()]))
+        
     def date_shift(self, date=0):
         """ get one day shift and return good stirng
         date = 0 means today. date = 1 means tommorow.
         And date = -1 means yesterday.
-
+        if nobody is on shift the day, return noshift
+        
         Args:
         date (int)
 
         Returns:
         stirng
         """
-        shift = self.get_date_shift_dict(date)
-        shift_str = self._format_table(shift)
+
         date_str = self._get_date_info(date)
         date_str = 'Today ' + date_str if date == 0 else date_str
+        
+        shift = self.get_date_shift_dict(date)           
+        if self._is_noshift(shift):
+            return date_str + ' is no shift.'
+               
+        shift_str = self._format_table(shift)
 
         return date_str + '\n' + shift_str.rstrip('\n')
 
@@ -198,7 +216,7 @@ class OFLS_SHIFT():
         week (int)
 
         Returns:
-        stirng
+        string
         """
         period_str = ('1st', '2nd', 'lunch', '3rd', '4th', '5th', 'night')
         week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
