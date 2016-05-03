@@ -56,6 +56,28 @@ class OFLS_SHIFT():
         datalist = self._get_csv_list(self.URL)
         self.data_dict = {data[0][:-3]: data[1:] for data in datalist}
 
+    def _fix_date_str(self, date_str):
+        """delete 0 from date_str
+
+        >>> shift._fix_date_str('05/08')
+        '5/8'
+
+        >>> shift._fix_date_str('09/02')
+        '9/2'
+
+        >>> shift._fix_date_str('10/12')
+        '10/12'
+
+        Args:
+        string
+
+        Returns:
+        string           
+        """
+        fixed_date_str = date_str if date_str[-2] != '0' else date_str[0:-2] + date_str[-1]
+        fixed_date_str = date_str if fixed_date_str[0] != '0' else fixed_date_str[1:]
+        return fixed_date_str
+        
     def _get_date_info(self, date=0):
         """get date information
         date = 0 means today. date = 1 means tommorow.
@@ -69,10 +91,7 @@ class OFLS_SHIFT():
         """
         date = datetime.date.today() + datetime.timedelta(date)
         date_str = date.strftime("%m/%d")
-
-        # change date string format ex)  -> 5/1, 03/10 -> 3/10
-        fixed_date_str = date_str if date_str[-2] != '0' else date_str[0:-2] + date_str[-1]
-        fixed_date_str = date_str if fixed_date_str[0] != '0' else fixed_date_str[1:]
+        fixed_date_str = self._fix_date_str(date_str)
         
         return fixed_date_str
 
@@ -90,7 +109,7 @@ class OFLS_SHIFT():
         if not date_info in self.data_dict:
             print('data not found orz')
             sys.exit()
-        #assert(date_info in self.data_dict)
+
 
         shift = self.data_dict[date_info]
         CELLS = 22
@@ -111,6 +130,11 @@ class OFLS_SHIFT():
     def _fix_list(self, shift_list):
         """remove empty string from shift_list
 
+        >>> lst = ['', '', 'sushi', 'is', '', 'good']
+        >>> shift._fix_list(lst)
+        ['sushi', 'is', 'good']
+
+        
         Args:
         shift_list ([string])
 
@@ -138,6 +162,17 @@ class OFLS_SHIFT():
     def _format_table(self, shift):
         """format shift good view (string).
 
+        >>> shift_dic = {1: ['aaa'], 2: ['bbb'], 3:['ccc'], 4:['ddd'], 5:['eee'], 6:['fff'], 7:['ggg']}
+        >>> table = shift._format_table(shift_dic)
+        >>> print(table)
+          1st: aaa
+          2nd: bbb
+        lunch: ccc
+          3rd: ddd
+          4th: eee
+          5th: fff
+        night: ggg
+        
         Args:
         shift {int: string}
 
@@ -147,11 +182,10 @@ class OFLS_SHIFT():
 
         periods = ('  1st: ', '  2nd: ', 'lunch: ',
                    '  3rd: ', '  4th: ', '  5th: ', 'night: ')
-        shift_str = ''
-        for i in range(6 + 1):
-            shift_str += periods[i] + ','.join(shift[i + 1]) + '\n'
 
-        return shift_str
+        shift_str_lst = [periods[i] + ','.join(shift[i + 1]) for i in range(6 + 1)]
+        
+        return '\n'.join(shift_str_lst)
 
     def week_shift(self, week=0):
         """ get one week shift and return good stirng
@@ -166,13 +200,20 @@ class OFLS_SHIFT():
         """
         week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
         shift_list = self._get_week_shift_list(week)
-        week_shift_str_list = [
+        week_shift_str_lst = [
             week_str[i] + '\n' + self._format_table(shift) for i, shift in enumerate(shift_list)]
 
-        return '\n'.join(week_shift_str_list)
+        return '\n\n'.join(week_shift_str_lst)
 
     def _is_noshift(self, shift):
         """
+        >>> shift_dic = {1: [''], 2: [''], 3:['ccc'], 4:['ddd'], 5:['eee'], 6:['fff'], 7:['']}
+        >>> shift._is_noshift(shift_dic)
+        False
+        >>> empty_shift_dic = {1: [], 2: [], 3:[], 4:[], 5:[], 6:[], 7:[]}
+        >>> shift._is_noshift(empty_shift_dic)
+        True
+
         Args
         shift (dictionary){int: [string]}
         
@@ -204,7 +245,7 @@ class OFLS_SHIFT():
                
         shift_str = self._format_table(shift)
 
-        return date_str + '\n' + shift_str.rstrip('\n')
+        return date_str + '\n' + shift_str
 
     def get_your_week_shift(self, week=0):
         """ get week shift for you and return good stirng
@@ -225,12 +266,11 @@ class OFLS_SHIFT():
         your_shift = [[period_str[period - 1] for period,
                        lst in shift.items() if self.NAME in lst] for shift in (shift_list)]
 
-        shift_str = ''
-        for i, shift in enumerate(your_shift):
-            shift_str += week_str[i] + ': ' + \
-                ','.join(shift) + '\n' if shift != [] else ""
+        shift_str_lst = [week_str[i] + ': ' + ','.join(shift)
+                             for i, shift in enumerate(your_shift) if shift != [] ]
+        
+        return '\n'.join(shift_str_lst)
 
-        return shift_str.rstrip('\n')
 
 
 def print_shift():
@@ -252,4 +292,6 @@ def main():
     print_shift()
 
 if __name__ == "__main__":
+    import doctest
+    doctest.testmod(extraglobs={'shift': OFLS_SHIFT()})
     main()
