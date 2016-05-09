@@ -286,21 +286,25 @@ class OFLS_SHIFT():
 def print_shift():
     p = argparse.ArgumentParser(
         description='This script is for get shift of ofls.')
-    p.add_argument('-w', '--week', type=int, help='week', nargs='?')
+    p.add_argument('-w', '--week', type=int, help='week',  nargs='?')
     p.add_argument('-t', '--table', help='is_table',
                    action='store_true')
     p.add_argument('-d', '--date', type=int, help='date', default=0, nargs='?')
     option_args = p.parse_known_args()[0]
 
     shift = OFLS_SHIFT()
-    if option_args.week != None:
+
+    if option_args.table:
+        if option_args.week == None:
+            print(shift.week_shift_table(0))
+        else:
+            print(shift.week_shift_table(option_args.week))
+
+    elif option_args.week != None:
         print('Your shift')
         print(shift.get_your_week_shift(option_args.week))
         print()
-        if option_args.table:
-            print(shift.week_shift_table(option_args.week))
-        else:
-            print(shift.week_shift(option_args.week))
+        print(shift.week_shift(option_args.week))
     else:
         print(shift.date_shift(option_args.date))
 
