@@ -325,14 +325,11 @@ def _padright(width, s, has_invisible=True):
     >>> _padright(6, 'hello') == 'hello '
     True
     """
-    # print('s=', s, '_strip_invisible(s) =',
-    #      _strip_invisible(s), 'width =', width)
 
     iwidth = width + len(s) - len(_strip_invisible(s)
                                   ) if has_invisible else width
-    # print(iwidth)
+    # FIXED BY masaponto
     fmt = "{0:　<%ds}" % iwidth
-    # print(fmt.format(s))
     return fmt.format(s)
 
 
@@ -404,7 +401,6 @@ def _align_column(strings, alignment, minwidth=0, has_invisible=True):
         width_fn = len
 
     maxwidth = max(max(map(width_fn, strings)), minwidth)
-    #maxwidth = max(max(map(width_fn, strings)), minwidth) * 2
 
     padded_strings = [padfn(maxwidth, s, has_invisible) for s in strings]
     return padded_strings
@@ -850,6 +846,7 @@ def _build_line(colwidths, colaligns, linefmt):
     if not linefmt:
         return None
     if hasattr(linefmt, "__call__"):
+        # FIXED BY masaponto
         colwidths = [(w - 1) * 2 for w in colwidths]
         return linefmt(colwidths, colaligns)
     else:

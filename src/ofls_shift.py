@@ -8,8 +8,10 @@ import datetime
 import argparse
 import requests
 import yaml
-#from tabulate import tabulate
+# from tabulate import tabulate
 import tabulate
+import kamebot
+kame = kamebot.Kamebot(channel='#random')
 
 
 class OFLS_SHIFT():
@@ -181,7 +183,7 @@ class OFLS_SHIFT():
         return shift_str_lst
 
     def week_shift_table(self, week=0):
-        #week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
+        # week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
         week_str = ('月', '火', '水', '木', '金', '土')
         periods = ('１', '２', '昼', '３', '４', '５', '夜')
 
@@ -305,8 +307,7 @@ def print_shift():
 
 def main():
     print_shift()
-    #shift = OFLS_SHIFT()
-    # shift.week_shift_table(0)
+
 
 if __name__ == "__main__":
     import doctest
