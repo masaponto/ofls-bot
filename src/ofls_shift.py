@@ -8,6 +8,8 @@ import datetime
 import argparse
 import requests
 import yaml
+#from tabulate import tabulate
+import tabulate
 
 
 class OFLS_SHIFT():
@@ -26,7 +28,7 @@ class OFLS_SHIFT():
 
         self.NAME = data['name']
         self.URL = 'https://docs.google.com/spreadsheets/d/' + \
-          data['key'] + '/export?format=csv&gid=' + data['gid']
+            data['key'] + '/export?format=csv&gid=' + data['gid']
 
         self.get_data_dict()
 
@@ -72,12 +74,14 @@ class OFLS_SHIFT():
         string
 
         Returns:
-        string           
+        string
         """
-        fixed_date_str = date_str if date_str[-2] != '0' else date_str[0:-2] + date_str[-1]
-        fixed_date_str = date_str if fixed_date_str[0] != '0' else fixed_date_str[1:]
+        fixed_date_str = date_str if date_str[
+            -2] != '0' else date_str[0:-2] + date_str[-1]
+        fixed_date_str = date_str if fixed_date_str[
+            0] != '0' else fixed_date_str[1:]
         return fixed_date_str
-        
+
     def _get_date_info(self, date=0):
         """get date information
         date = 0 means today. date = 1 means tommorow.
@@ -92,7 +96,7 @@ class OFLS_SHIFT():
         date = datetime.date.today() + datetime.timedelta(date)
         date_str = date.strftime("%m/%d")
         fixed_date_str = self._fix_date_str(date_str)
-        
+
         return fixed_date_str
 
     def get_date_shift_dict(self, date=0):
@@ -104,17 +108,16 @@ class OFLS_SHIFT():
         Returns
         dictionary {int: [string]}
         """
-        date_info = self._get_date_info(date)        
-        
+        date_info = self._get_date_info(date)
+
         if not date_info in self.data_dict:
             print('data not found orz')
             sys.exit()
 
-
         shift = self.data_dict[date_info]
         CELLS = 22
         shift = shift[:CELLS]
-       
+
         shift_dict = {1: shift[0:1],
                       2: shift[2:3],
                       3: shift[4:6],
@@ -134,7 +137,7 @@ class OFLS_SHIFT():
         >>> shift._fix_list(lst)
         ['sushi', 'is', 'good']
 
-        
+
         Args:
         shift_list ([string])
 
@@ -161,31 +164,37 @@ class OFLS_SHIFT():
 
     def _format_table(self, shift):
         """format shift good view (string).
-
-        >>> shift_dic = {1: ['aaa'], 2: ['bbb'], 3:['ccc'], 4:['ddd'], 5:['eee'], 6:['fff'], 7:['ggg']}
-        >>> table = shift._format_table(shift_dic)
-        >>> print(table)
-          1st: aaa
-          2nd: bbb
-        lunch: ccc
-          3rd: ddd
-          4th: eee
-          5th: fff
-        night: ggg
-        
         Args:
         shift {int: string}
 
         returns:
-        string
+        [stirng]
         """
 
         periods = ('  1st: ', '  2nd: ', 'lunch: ',
                    '  3rd: ', '  4th: ', '  5th: ', 'night: ')
 
-        shift_str_lst = [periods[i] + ','.join(shift[i + 1]) for i in range(6 + 1)]
-        
-        return '\n'.join(shift_str_lst)
+        shift_str_lst = [periods[i] +
+                         ','.join(shift[i + 1]) for i in range(6 + 1)]
+        # print(shift_str_lst)
+        # return '\n'.join(shift_str_lst)
+        return shift_str_lst
+
+    def week_shift_table(self, week=0):
+        #week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
+        week_str = ('月', '火', '水', '木', '金', '土')
+        periods = ('１', '２', '昼', '３', '４', '５', '夜')
+
+        shift_list = self._get_week_shift_list(week)
+
+        week_shift_str_list = [
+            ['・'.join(shift[i + 1]) for i in range(7)] for shift in shift_list]
+
+        week_shift_str_list.insert(0, periods)
+
+        table = [list(x) for x in zip(*week_shift_str_list)]
+
+        return tabulate.tabulate(table, week_str, tablefmt="pipe")
 
     def week_shift(self, week=0):
         """ get one week shift and return good stirng
@@ -201,7 +210,7 @@ class OFLS_SHIFT():
         week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
         shift_list = self._get_week_shift_list(week)
         week_shift_str_lst = [
-            week_str[i] + '\n' + self._format_table(shift) for i, shift in enumerate(shift_list)]
+            week_str[i] + '\n' + '\n'.join(self._format_table(shift)) for i, shift in enumerate(shift_list)]
 
         return '\n\n'.join(week_shift_str_lst)
 
@@ -216,19 +225,19 @@ class OFLS_SHIFT():
 
         Args
         shift (dictionary){int: [string]}
-        
+
         Returns:
         boolean
         """
 
         return bool(sum([v == [] for k, v in shift.items()]))
-        
+
     def date_shift(self, date=0):
         """ get one day shift and return good stirng
         date = 0 means today. date = 1 means tommorow.
         And date = -1 means yesterday.
         if nobody is on shift the day, return noshift
-        
+
         Args:
         date (int)
 
@@ -238,12 +247,12 @@ class OFLS_SHIFT():
 
         date_str = self._get_date_info(date)
         date_str = 'Today ' + date_str if date == 0 else date_str
-        
-        shift = self.get_date_shift_dict(date)           
+
+        shift = self.get_date_shift_dict(date)
         if self._is_noshift(shift):
             return date_str + ' is no shift.'
-               
-        shift_str = self._format_table(shift)
+
+        shift_str = '\n'.join(self._format_table(shift))
 
         return date_str + '\n' + shift_str
 
@@ -267,15 +276,17 @@ class OFLS_SHIFT():
                        lst in shift.items() if self.NAME in lst] for shift in (shift_list)]
 
         shift_str_lst = [week_str[i] + ': ' + ','.join(shift)
-                             for i, shift in enumerate(your_shift) if shift != [] ]
-        
+                         for i, shift in enumerate(your_shift) if shift != []]
+
         return '\n'.join(shift_str_lst)
 
 
-
 def print_shift():
-    p = argparse.ArgumentParser(description='This script is for get shift of ofls.')
+    p = argparse.ArgumentParser(
+        description='This script is for get shift of ofls.')
     p.add_argument('-w', '--week', type=int, help='week', nargs='?')
+    p.add_argument('-t', '--table', help='is_table',
+                   action='store_true')
     p.add_argument('-d', '--date', type=int, help='date', default=0, nargs='?')
     option_args = p.parse_known_args()[0]
 
@@ -284,12 +295,18 @@ def print_shift():
         print('Your shift')
         print(shift.get_your_week_shift(option_args.week))
         print()
-        print(shift.week_shift(option_args.week))
+        if option_args.table:
+            print(shift.week_shift_table(option_args.week))
+        else:
+            print(shift.week_shift(option_args.week))
     else:
         print(shift.date_shift(option_args.date))
 
+
 def main():
     print_shift()
+    #shift = OFLS_SHIFT()
+    # shift.week_shift_table(0)
 
 if __name__ == "__main__":
     import doctest
