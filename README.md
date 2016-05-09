@@ -43,3 +43,7 @@ The sample is as follows
 
 ## License
 - MIT
+
+## THANKS
+This software uses python-tabulate.py
+https://github.com/gregbanks/python-tabulate/blob/master/tabulate.py
