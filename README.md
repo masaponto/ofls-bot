@@ -32,9 +32,15 @@ print next week
 $ ofls -w 1
 ```
 
+if you want to see the shift table for a week  
+```
+$ ofls -t
+```
+
+
 - \-w , \--week: Please input integer. Defalt is 0 which means this week. 1 means next week. -1 means last week.
 - \-d , \--date: Please input integer. Defalt is 0 which means today. 1 means tomorrow. -1 means yesterday.
-
+- \-t , \--table: You can see the time table for a week
 
 ## And more ...
 If you want use ofls-shift as slack bot. You can use [kame_bot](https://github.com/masaponto/kamebot)  
