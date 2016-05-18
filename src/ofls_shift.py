@@ -117,7 +117,7 @@ class OFLS_SHIFT():
             sys.exit()
 
         shift = self.data_dict[date_info]
-        CELLS = 22
+        CELLS = 25
         shift = shift[:CELLS]
 
         shift_dict = {1: shift[0:1],
@@ -126,10 +126,11 @@ class OFLS_SHIFT():
                       4: shift[7:9],
                       5: shift[10:12],
                       6: shift[13:15],
-                      7: shift[16:22]}
+                      7: shift[16:21],
+                      8: [shift[22]],
+                      9: [shift[23]]}
 
         shift_dict = {k: self._fix_list(v) for k, v in shift_dict.items()}
-
         return shift_dict
 
     def _fix_list(self, shift_list):
@@ -174,10 +175,10 @@ class OFLS_SHIFT():
         """
 
         periods = ('  1st: ', '  2nd: ', 'lunch: ',
-                   '  3rd: ', '  4th: ', '  5th: ', 'night: ')
+                   '  3rd: ', '  4th: ', '  5th: ', 'night: ', '------\n' + 'mura: ', 'higu: ')
 
         shift_str_lst = [periods[i] +
-                         ','.join(shift[i + 1]) for i in range(6 + 1)]
+                         ','.join(shift[i + 1]) for i in range(6 + 3)]
         # print(shift_str_lst)
         # return '\n'.join(shift_str_lst)
         return shift_str_lst
