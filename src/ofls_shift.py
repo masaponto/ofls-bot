@@ -10,8 +10,6 @@ import requests
 import yaml
 # from tabulate import tabulate
 import tabulate
-import kamebot
-kame = kamebot.Kamebot(channel='#random')
 
 
 class OFLS_SHIFT():
