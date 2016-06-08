@@ -217,7 +217,7 @@ class OFLS_SHIFT():
 
     def _is_noshift(self, shift):
         """
-        >>> shift_dic = {1: [''], 2: [''], 3:['ccc'], 4:['ddd'], 5:['eee'], 6:['fff'], 7:['']}
+        >>> shift_dic = {1: [], 2: [], 3:['ccc'], 4:['ddd'], 5:['eee'], 6:['fff'], 7:[]}
         >>> shift._is_noshift(shift_dic)
         False
         >>> empty_shift_dic = {1: [], 2: [], 3:[], 4:[], 5:[], 6:[], 7:[]}
@@ -231,7 +231,7 @@ class OFLS_SHIFT():
         boolean
         """
 
-        return bool(sum([v == [] for k, v in shift.items()]))
+        return bool(all([v == [] for k, v in shift.items()]))
 
     def date_shift(self, date=0):
         """ get one day shift and return good stirng
