@@ -303,6 +303,7 @@ def print_shift():
         print()
         print(shift.week_shift(option_args.week))
     else:
+        option_args.date = 0 if option_args.date == None else option_args.date
         print(shift.date_shift(option_args.date))
 
 
