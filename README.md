@@ -38,7 +38,8 @@ if you want to see the shift table for a week
 $ ofls -t
 ```
 
-Calc how much salary did you earn in this mounth (Japanese yen).
+Calc how much salary did you earn in this mounth (Japanese yen).  
+This is based on shift table, perhaps NOT REAL.
 ```
 $ ofls -s
 ```
