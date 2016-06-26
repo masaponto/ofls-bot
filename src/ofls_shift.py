@@ -280,6 +280,43 @@ class OFLS_SHIFT():
         return '\n'.join(shift_str_lst)
 
 
+
+    def _get_month_shift_list(self):
+        """get shift list from this month first to today.
+
+        Returns:
+        list of shift (dictionary)  [{int: string}]
+        """
+        
+        today = datetime.date.today()
+        start_day = - int(today.strftime("%d")) + 1        
+        return [self.get_date_shift_dict(date) for date in range(start_day, 0)]
+    
+
+    def get_your_month_salary(self):
+        """
+        get your salary (yen) of this month
+        Returns:
+        salary of this month (int)
+        """
+        return sum([self._get_your_date_salary(shift) for shift in self._get_month_shift_list()])
+        
+    
+    def _get_your_date_salary(self, shift):
+        """
+        get your salary (yen) of that day
+
+        Args:
+        shift {int: string}
+        
+        Returns:
+        salary of this month (int)       
+        """
+        to_time = lambda p: 1 if p == 3 or p == 7 else 1.5
+        work_time = [to_time(k) for k, v in shift.items() if self.NAME in v]
+        return int(sum(work_time) * 1000)
+                             
+
 def print_shift():
     p = argparse.ArgumentParser(
         description='This script is for get shift of ofls.')
@@ -287,6 +324,8 @@ def print_shift():
     p.add_argument('-t', '--table', help='is_table',
                    action='store_true')
     p.add_argument('-d', '--date', type=int, help='date', default=0, nargs='?')
+    p.add_argument('-s', '--salary', help='How much salary did you earn',
+                   action='store_true')
     option_args = p.parse_known_args()[0]
 
     shift = OFLS_SHIFT()
@@ -296,7 +335,9 @@ def print_shift():
             print(shift.week_shift_table(0))
         else:
             print(shift.week_shift_table(option_args.week))
-
+    elif option_args.salary:
+        print(shift.get_your_month_salary(),'yen')
+        
     elif option_args.week != None:
         print('Your shift')
         print(shift.get_your_week_shift(option_args.week))
@@ -309,7 +350,8 @@ def print_shift():
 
 def main():
     print_shift()
-
+    #shift = OFLS_SHIFT()
+    #print(shift.get_your_month_salary())
 
 if __name__ == "__main__":
     import doctest
