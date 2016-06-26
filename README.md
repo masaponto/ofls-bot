@@ -38,9 +38,17 @@ if you want to see the shift table for a week
 $ ofls -t
 ```
 
+Calc how much salary did you earn in this mounth (Japanese yen).
+```
+$ ofls -s
+```
+
+
 - \-w , \--week: Please input integer. Defalt is 0 which means this week. 1 means next week. -1 means last week.
 - \-d , \--date: Please input integer. Defalt is 0 which means today. 1 means tomorrow. -1 means yesterday.
-- \-t , \--table: You can see the time table for a week
+- \-t , \--table: You can see the time table for a week.
+- \-s , \--salary: You can see how much salary did you earn in this mounth (Japanese yen).
+
 
 ## And more ...
 If you want use ofls-shift as slack bot. You can use [kame_bot](https://github.com/masaponto/kamebot)  
