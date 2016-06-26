@@ -5,7 +5,7 @@ from distutils.core import setup
 
 setup(
     name='ofls-shift',
-    version='1.0',
+    version='1.1',
     description='Download csv file via google spread sheet, and return awesome string',
     author='masaponto',
     author_email='masaponto@gmail.com',
