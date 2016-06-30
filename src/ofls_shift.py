@@ -290,7 +290,7 @@ class OFLS_SHIFT():
         
         today = datetime.date.today()
         start_day = - int(today.strftime("%d")) + 1        
-        return [self.get_date_shift_dict(date) for date in range(start_day, 0)]
+        return [self.get_date_shift_dict(date) for date in range(start_day, 1)]
     
 
     def get_your_month_salary(self):
