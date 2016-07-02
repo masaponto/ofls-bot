@@ -8,8 +8,9 @@ import datetime
 import argparse
 import requests
 import yaml
-# from tabulate import tabulate
 import tabulate
+
+from typing import List, Dict
 
 
 class OFLS_SHIFT():
@@ -32,14 +33,8 @@ class OFLS_SHIFT():
 
         self.get_data_dict()
 
-    def _get_csv_list(self, url):
+    def _get_csv_list(self, url: str) -> List[List[str]]:
         """Downlooad csv from google spreadsheets and return list of string
-
-        Args:
-        url (string)
-
-        Returns:
-        2d-list [[string]]
         """
         try:
             r = requests.get(url)
@@ -58,7 +53,7 @@ class OFLS_SHIFT():
         datalist = self._get_csv_list(self.URL)
         self.data_dict = {data[0][:-3]: data[1:] for data in datalist}
 
-    def _fix_date_str(self, date_str):
+    def _fix_date_str(self, date_str: str) -> str:
         """delete 0 from date_str
 
         >>> shift._fix_date_str('05/08')
@@ -69,12 +64,6 @@ class OFLS_SHIFT():
 
         >>> shift._fix_date_str('10/12')
         '10/12'
-
-        Args:
-        string
-
-        Returns:
-        string
         """
         fixed_date_str = date_str if date_str[
             -2] != '0' else date_str[0:-2] + date_str[-1]
@@ -82,31 +71,22 @@ class OFLS_SHIFT():
             0] != '0' else fixed_date_str[1:]
         return fixed_date_str
 
-    def _get_date_info(self, date=0):
+    def _get_date_info(self, date: int = 0) -> str:
         """get date information
         date = 0 means today. date = 1 means tommorow.
         And date = -1 means yesterday.
-
-        Args:
-        date (int)
-
-        Returns:
-        fixed_date_str (string)
         """
-        date = datetime.date.today() + datetime.timedelta(date)
-        date_str = date.strftime("%m/%d")
+        fdate = datetime.date.today() + datetime.timedelta(date)
+        date_str = fdate.strftime("%m/%d")
         fixed_date_str = self._fix_date_str(date_str)
 
         return fixed_date_str
 
-    def get_date_shift_dict(self, date=0):
+    def get_date_shift_dict(self, date: int = 0) -> Dict[int, List[str]]:
         """get shift (dictionary) baesd on the date (argument)
 
         Args:
         date (int)
-
-        Returns
-        dictionary {int: [string]}
         """
         date_info = self._get_date_info(date)
 
@@ -131,56 +111,35 @@ class OFLS_SHIFT():
         shift_dict = {k: self._fix_list(v) for k, v in shift_dict.items()}
         return shift_dict
 
-    def _fix_list(self, shift_list):
+    def _fix_list(self, shift_list: List[str]) -> List[str]:
         """remove empty string from shift_list
 
         >>> lst = ['', '', 'sushi', 'is', '', 'good']
         >>> shift._fix_list(lst)
         ['sushi', 'is', 'good']
-
-
-        Args:
-        shift_list ([string])
-
-        Returns:
-        fixed_shift_list ([string])
         """
         return [name for name in shift_list if name != '']
 
-    def _get_week_shift_list(self, week=0):
+    def _get_week_shift_list(self, week: int = 0) -> List[Dict[int, List[str]]]:
         """get one week shift
         week = 0 means this week. week = 1 means next week.
         And week = -1 means last week.
-
-        Args:
-        week (int)
-
-        Returns:
-        list of shift (dictionary)  [{int: string}]
         """
         weekday = datetime.date.today().weekday()
         week_start = - weekday + week * 7
         week_end = 5 - weekday + week * 7
         return [self.get_date_shift_dict(date) for date in range(week_start, week_end)]
 
-    def _format_table(self, shift):
+    def _format_table(self, shift: Dict[int, List[str]]) -> List[str]:
         """format shift good view (string).
-        Args:
-        shift {int: string}
-
-        returns:
-        [stirng]
         """
 
         periods = ('  1st: ', '  2nd: ', 'lunch: ',
                    '  3rd: ', '  4th: ', '  5th: ', 'night: ', '------\n' + 'mura: ', 'higu: ')
 
-        shift_str_lst = [periods[i] +
-                         ','.join(shift[i + 1]) for i in range(6 + 3)]
+        return [periods[i] + ','.join(shift[i + 1]) for i in range(6 + 3)]
 
-        return shift_str_lst
-
-    def week_shift_table(self, week=0):
+    def week_shift_table(self, week: int = 0) -> str:
         week_str = ('月', '火', '水', '木', '金')
         periods = ('１', '２', '昼', '３', '４', '５', '夜')
 
@@ -195,17 +154,12 @@ class OFLS_SHIFT():
 
         return tabulate.tabulate(table, week_str, tablefmt="pipe")
 
-    def week_shift(self, week=0):
+    def week_shift(self, week: int = 0) -> str:
         """ get one week shift and return good stirng
         week = 0 means this week. week = 1 means next week.
         And week = -1 means last week.
-
-        Args:
-        week (int)
-
-        Returns:
-        stirng
         """
+
         week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
         shift_list = self._get_week_shift_list(week)
         week_shift_str_lst = [
@@ -213,7 +167,7 @@ class OFLS_SHIFT():
 
         return '\n\n'.join(week_shift_str_lst)
 
-    def _is_noshift(self, shift):
+    def _is_noshift(self, shift: Dict[int, List[str]]) -> bool:
         """
         >>> shift_dic = {1: [], 2: [], 3:['ccc'], 4:['ddd'], 5:['eee'], 6:['fff'], 7:[]}
         >>> shift._is_noshift(shift_dic)
@@ -221,27 +175,15 @@ class OFLS_SHIFT():
         >>> empty_shift_dic = {1: [], 2: [], 3:[], 4:[], 5:[], 6:[], 7:[]}
         >>> shift._is_noshift(empty_shift_dic)
         True
-
-        Args
-        shift (dictionary){int: [string]}
-
-        Returns:
-        boolean
         """
 
         return bool(all([v == [] for k, v in shift.items()]))
 
-    def date_shift(self, date=0):
+    def date_shift(self, date: int = 0) -> str:
         """ get one day shift and return good stirng
         date = 0 means today. date = 1 means tommorow.
         And date = -1 means yesterday.
         if nobody is on shift the day, return noshift
-
-        Args:
-        date (int)
-
-        Returns:
-        stirng
         """
 
         date_str = self._get_date_info(date)
@@ -255,18 +197,12 @@ class OFLS_SHIFT():
 
         return date_str + '\n' + shift_str
 
-    def get_your_week_shift(self, week=0):
+    def get_your_week_shift(self, week: int = 0) -> str:
         """ get week shift for you and return good stirng
         week = 0 means this week. week = 1 means next week.
         And week = -1 means last week.
-
-        Args:
-        name string
-        week (int)
-
-        Returns:
-        string
         """
+
         period_str = ('1st', '2nd', 'lunch', '3rd', '4th', '5th', 'night')
         week_str = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
 
@@ -279,7 +215,7 @@ class OFLS_SHIFT():
 
         return '\n'.join(shift_str_lst)
 
-    def _get_month_shift_list(self):
+    def _get_month_shift_list(self) -> List[Dict[int, List[str]]]:
         """get shift list from this month first to today.
 
         Returns:
@@ -290,30 +226,22 @@ class OFLS_SHIFT():
         start_day = - int(today.strftime("%d")) + 1
         return [self.get_date_shift_dict(date) for date in range(start_day, 1)]
 
-    def get_your_month_salary(self):
+    def get_your_month_salary(self) -> int:
         """
         get your salary (yen) of this month
-        Returns:
-        salary of this month (int)
         """
         return sum([self._get_your_date_salary(shift) for shift in self._get_month_shift_list()])
 
-    def _get_your_date_salary(self, shift):
+    def _get_your_date_salary(self, shift: Dict[int, List[str]]) -> int:
         """
         get your salary (yen) of that day
-
-        Args:
-        shift {int: string}
-
-        Returns:
-        salary of this month (int)
         """
         to_time = lambda p: 1 if p == 3 or p == 7 else 1.5
         work_time = [to_time(k) for k, v in shift.items() if self.NAME in v]
         return int(sum(work_time) * 1000)
 
 
-def print_shift():
+def print_shift() -> None:
     p = argparse.ArgumentParser(
         description='This script is for get shift of ofls.')
     p.add_argument('-w', '--week', type=int, help='week',  nargs='?')
