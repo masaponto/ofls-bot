@@ -47,7 +47,7 @@ class OFLS_SHIFT():
         reader = csv.reader(decoded_content.splitlines(), delimiter=',')
         return list(reader)
 
-    def get_data_dict(self):
+    def get_data_dict(self) -> None:
         """get new shift file, and set it as dictionary
         """
         datalist = self._get_csv_list(self.URL)
