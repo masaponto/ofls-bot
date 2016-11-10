@@ -72,7 +72,7 @@ class OFLS_SHIFT():
             -2] != '0' else date_str[0:-2] + date_str[-1]
         fixed_date_str = fixed_date_str if fixed_date_str[
             0] != '0' else fixed_date_str[1:]
-    
+
         return fixed_date_str
 
     def _get_date_info(self, date: int = 0) -> str:
@@ -93,8 +93,8 @@ class OFLS_SHIFT():
         date (int)
         """
         date_info = self._get_date_info(date)
-    
-        if not date_info in self.data_dict:            
+
+        if not date_info in self.data_dict:
             print('data not found orz')
             sys.exit()
 
@@ -102,13 +102,13 @@ class OFLS_SHIFT():
         CELLS = 25
         shift = shift[:CELLS]
 
-        shift_dict = {1: shift[0:1],
-                      2: shift[2:3],
-                      3: shift[4:6],
-                      4: shift[7:9],
-                      5: shift[10:12],
-                      6: shift[13:15],
-                      7: shift[16:21],
+        shift_dict = {1: shift[0:2],
+                      2: shift[2:4],
+                      3: shift[4:7],
+                      4: shift[7:10],
+                      5: shift[10:13],
+                      6: shift[13:16],
+                      7: shift[16:22],
                       8: [shift[22]],
                       9: [shift[23]]}
 
