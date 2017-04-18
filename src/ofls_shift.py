@@ -13,8 +13,8 @@ import tabulate
 from typing import List, Dict
 
 
-class OFLS_SHIFT():
-    """Downlooad the ofls shift which is splead sheet, and return good string.
+class OflsShift():
+    """Downlooad the ofls shift which is spread sheet, and return good string.
     """
 
     def __init__(self):
@@ -51,7 +51,7 @@ class OFLS_SHIFT():
         """get new shift file, and set it as dictionary
         """
         datalist = self._get_csv_list(self.URL)
-        self.data_dict = {data[0][:-3]: data[1:] for data in datalist}
+        self.data_dict = {data[0][:-3]: data[0:] for data in datalist}
 
     def _fix_date_str(self, date_str: str) -> str:
         """delete 0 from date_str
@@ -99,18 +99,18 @@ class OFLS_SHIFT():
             sys.exit()
 
         shift = self.data_dict[date_info]
-        CELLS = 25
+        CELLS = 26
         shift = shift[:CELLS]
-
-        shift_dict = {1: shift[0:2],
-                      2: shift[2:4],
-                      3: shift[4:7],
-                      4: shift[7:10],
-                      5: shift[10:13],
-                      6: shift[13:16],
-                      7: shift[16:22],
-                      8: [shift[22]],
-                      9: [shift[23]]}
+        shift_dict = {1: shift[1: 3],
+                      2: shift[3:5],
+                      3: shift[5:8],
+                      4: shift[8:11],
+                      5: shift[11:14],
+                      6: shift[14:17],
+                      7: shift[17:23],
+                      8: [shift[23]],
+                      9: [shift[24]],
+                      10: [shift[25]]}
 
         shift_dict = {k: self._fix_list(v) for k, v in shift_dict.items()}
         return shift_dict
@@ -124,7 +124,7 @@ class OFLS_SHIFT():
         """
         return [name for name in shift_list if name != '']
 
-    def _get_week_shift_list(self, week: int = 0) -> List[Dict[int, List[str]]]:
+    def _get_week_shift_list(self, week: int=0) -> List[Dict[int, List[str]]]:
         """get one week shift
         week = 0 means this week. week = 1 means next week.
         And week = -1 means last week.
@@ -139,9 +139,9 @@ class OFLS_SHIFT():
         """
 
         periods = ('  1st: ', '  2nd: ', 'lunch: ',
-                   '  3rd: ', '  4th: ', '  5th: ', 'night: ', '------\n' + 'mura: ', 'higu: ')
+                   '  3rd: ', '  4th: ', '  5th: ', 'night: ', '------\n' + 'mura: ', 'higu: ', 'etc:')
 
-        return [periods[i] + ','.join(shift[i + 1]) for i in range(6 + 3)]
+        return [periods[i] + ','.join(shift[i + 1]) for i in range(10)]
 
     def week_shift_table(self, week: int = 0) -> str:
         week_str = ('月', '火', '水', '木', '金')
@@ -190,10 +190,11 @@ class OFLS_SHIFT():
         if nobody is on shift the day, return noshift
         """
 
-        date_str = self._get_date_info(date)
-        date_str = 'Today ' + date_str if date == 0 else date_str
+        date_key = self._get_date_info(date)
+        date_str = self.data_dict[date_key][0]
 
         shift = self.get_date_shift_dict(date)
+
         if self._is_noshift(shift):
             return date_str + ' is no shift.'
 
@@ -201,7 +202,7 @@ class OFLS_SHIFT():
 
         return date_str + '\n' + shift_str
 
-    def get_your_week_shift(self, week: int = 0) -> str:
+    def get_your_week_shift(self, week: int=0) -> str:
         """ get week shift for you and return good stirng
         week = 0 means this week. week = 1 means next week.
         And week = -1 means last week.
@@ -256,13 +257,14 @@ def print_shift() -> None:
                    action='store_true')
     option_args = p.parse_known_args()[0]
 
-    shift = OFLS_SHIFT()
+    shift = OflsShift()
 
     if option_args.table:
         if option_args.week == None:
             print(shift.week_shift_table(0))
         else:
             print(shift.week_shift_table(option_args.week))
+
     elif option_args.salary:
         print(shift.get_your_month_salary(), 'yen')
 
@@ -271,6 +273,7 @@ def print_shift() -> None:
         print(shift.get_your_week_shift(option_args.week))
         print()
         print(shift.week_shift(option_args.week))
+
     else:
         option_args.date = 0 if option_args.date == None else option_args.date
         print(shift.date_shift(option_args.date))
@@ -278,10 +281,10 @@ def print_shift() -> None:
 
 def main():
     print_shift()
-    #shift = OFLS_SHIFT()
+    # shift = OFLS_SHIFT()
     # print(shift.get_your_month_salary())
 
 if __name__ == "__main__":
     import doctest
-    doctest.testmod(extraglobs={'shift': OFLS_SHIFT()})
+    doctest.testmod(extraglobs={'shift': OflsShift()})
     main()
