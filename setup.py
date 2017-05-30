@@ -4,7 +4,7 @@
 from distutils.core import setup
 
 setup(
-    name='oflsshift',
+    name='ofls',
     version='2.0',
     description='Print shift table of OFLS',
     author='masaponto',
