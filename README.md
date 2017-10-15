@@ -32,6 +32,8 @@ if you want to see the shift table for a week
 ```
 $ ofls -t
 ```
+## To Google Calendar
+- https://gist.github.com/masaponto/eefdfdcdd20e99c4f5d574d9d8105f7f
 
 ## License
 This software is released under the MIT License  
