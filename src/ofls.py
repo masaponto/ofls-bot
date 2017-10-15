@@ -54,15 +54,17 @@ class Shift():
         else:
             return 'Ooops :('
 
-    def week_shift(self, date_str):
+    def get_week_shift_list(self, date_str):
         start, end = self.__get_show_range(date_str)
-        weekshift = [self.date_shift(str(i)) for i in range(start, end)]
+        return [self.date_shift(str(i)) for i in range(start, end)]
+
+    def week_shift(self, date_str):
+        weekshift = self.get_week_shift_list(date_str)
 
         return '\n\n'.join([shift.date + '\n' + shift.get_string() for shift in weekshift])
 
     def week_table(self, date_str):
-        start, end = self.__get_show_range(date_str)
-        weekshift = [self.date_shift(str(i)) for i in range(start, end)]
+        weekshift = self.get_week_shift_list(date_str)
         ptable = PrettyTable()
         ptable.add_column('Period', ('1st', '2nd', 'lun', '3rd',
                                      '4th', '5th', 'nig', 'mur', 'hig', 'etc'), align='l')
